@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kuza Pocket</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Styles.css') }}">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+    <div class="card">
+        <div style="text-align: right; margin-bottom: 10px;">
+            <select id="langSelect" onchange="changeLanguage()">
+                <option value="en">English</option>
+                <option value="fr">Français</option>
+                <option value="rw">Kinyarwanda</option>
+            </select>
+        </div>
+
+        <h1 id="txtTitle">Kuza Pocket</h1>
+
+        <div id="registrationForm" style="display:none;">
+            <h3 id="txtRegTitle">Welcome! Please Register</h3>
+            <input type="text" id="inputName" placeholder="Full Name">
+            <input type="text" id="inputNIF" placeholder="NIF or ID Number">
+            <button class="btn-black" id="btnStart" onclick="registerUser()">Start Using Kuza</button>
+        </div>
+
+        <div id="mainApp" style="display:none;">
+            <p><span id="txtVendor">Vendor</span>: <b id="displayVendorName">...</b></p>
+            <p>ID: <b id="displayVendorID">...</b></p>
+            
+            <hr>
+
+            <input type="text" id="itemName" placeholder="Item Name (e.g. Rice)">
+            <input type="number" id="saleAmount" placeholder="Amount (RWF)">
+            
+            <select id="transactionType" style="width:100%; margin-bottom:10px; padding:10px; border-radius:5px; border:1px solid #ccc;">
+                <option value="Cash Sale">Cash Sale</option>
+                <option value="Credit Sale">Credit Sale</option>
+                <option value="Restock">Restock </option>
+            </select>
+
+            <div style="display:flex; gap:10px;">
+                <button class="btn-black" id="btnGenCode" onclick="askForCode()" style="flex:1;">1. Get Security Code</button>
+                <button class="btn-green" onclick="simulateMoMo()" style="flex:1;">Pay with MoMo</button>
+            </div>
+
+            <div id="smsSimulation" style="display:none; background:#e3f2fd; border:1px solid #2196f3; padding:10px; margin-top:10px; border-radius:5px; color: #0d47a1;">
+                <p style="font-size:0.8rem; margin:0;"><b id="txtSmsLabel">SMS Sent:</b></p>
+                <p id="smsContent" style="font-size:0.9rem; margin:0;"></p>
+            </div>
+
+            <div id="verifyBox" style="display:none; margin-top: 20px; border: 2px dashed #333; padding: 15px; border-radius:10px; background: #f9f9f9;">
+                <p><span id="txtCode">Code</span>: <span id="displayCode" style="font-weight:bold; font-size:1.8em; color:#d32f2f;">0000</span></p>
+                <input type="text" id="buyerCode" placeholder="Enter code from client">
+                <button class="btn-green" id="btnVerify" onclick="confirmSale()">2. Verify & Save</button>
+            </div>
+
+            <hr>
+
+            <h3 id="txtNotebook">Digital Notebook</h3>
+            <table id="journalTable" style="width:100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 2px solid #333;">
+                        <th id="txtDateCol" style="text-align:left; padding:5px;">Date</th>
+                        <th id="txtItemCol" style="text-align:left; padding:5px;">Item</th>
+                        <th id="txtTypeCol" style="text-align:left; padding:5px;">Type</th>
+                        <th id="txtAmtCol" style="text-align:right; padding:5px;">Amount</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="journalBody"></tbody>
+            </table>
+            
+            <button class="btn-gray" id="btnReport" onclick="getBankReport()" style="margin-top:20px; width:100%;">Download Bank Report (PDF)</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
