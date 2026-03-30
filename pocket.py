@@ -1,11 +1,12 @@
 from flask import Flask, request, jsonify, render_template
 import hashlib
+import os
 import time
 
 app = Flask(__name__)
 
 # Settings
-SECRET_KEY = "kuza_secret_777" 
+SECRET_KEY = os.getenv("KUZA_SECRET_KEY", "kuza_secret_777")
 VENDOR_ID = "VND_001"
 
 def make_secure_code(amount):
@@ -23,16 +24,22 @@ def home():
 
 @app.route('/api/get-code', methods=['POST'])
 def get_code():
-    data = request.json
+    data = request.get_json(silent=True) or {}
     amount = data.get('amount')
+    if amount is None or str(amount).strip() == "":
+        return jsonify({"error": "Missing amount"}), 400
     code = make_secure_code(amount)
     return jsonify({"code": code})
 
 @app.route('/api/check-code', methods=['POST'])
 def check_code():
-    data = request.json
+    data = request.get_json(silent=True) or {}
     amount = data.get('amount')
     typed_code = data.get('code')
+    if amount is None or str(amount).strip() == "":
+        return jsonify({"success": False, "message": "Missing amount"}), 400
+    if typed_code is None or str(typed_code).strip() == "":
+        return jsonify({"success": False, "message": "Missing code"}), 400
     
     correct_code = make_secure_code(amount)
     

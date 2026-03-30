@@ -3,7 +3,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
     background-color: #f0f2f5;
 }
@@ -13,7 +13,9 @@ body {
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    width: 380px;
+    width: 430px;
+    max-height: 92vh;
+    overflow-y: auto;
     text-align: center;
 }
 
@@ -40,11 +42,51 @@ button {
     transition: 0.3s;
 }
 
-.btn-primary { background: #000; color: white; }
-.btn-primary:hover { background: #333; }
+.btn-black { background: #000; color: #fff; }
+.btn-black:hover { background: #333; }
 
-.btn-success { background: #28a745; color: white; margin-top: 10px; }
-.btn-success:hover { background: #218838; }
+.btn-black { background: #000000; color: #fff; margin-top: 10px; }
+.btn-black:hover { background: #000000; }
+
+.btn-gray { background: #e0e0e0; color: #111; }
+.btn-gray:hover { background: #cecece; }
+
+.pin-toggle {
+    margin-top: -2px;
+    margin-bottom: 8px;
+    padding: 8px;
+    font-size: 0.9rem;
+}
+
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin: 12px 0;
+}
+
+.tab-btn {
+    background: #ececec;
+    color: #222;
+}
+
+.tab-btn.active {
+    background: #000;
+    color: #fff;
+}
+
+.section-panel {
+    text-align: left;
+}
+
+.hidden {
+    display: none;
+}
+
+.flow-hint {
+    margin: 0 0 10px;
+    font-size: 0.88rem;
+    color: #444;
+}
 
 .result-box {
     margin-top: 25px;

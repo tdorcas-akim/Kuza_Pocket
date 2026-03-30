@@ -2,10 +2,10 @@
 <html>
 <head>
     <title>Kuza Pocket</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='Styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <script src="{{ url_for('static', filename='vendor/jspdf.umd.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/jspdf.plugin.autotable.min.js') }}"></script>
 </head>
 <body>
     <div class="card">
@@ -23,7 +23,16 @@
             <h3 id="txtRegTitle">Welcome! Please Register</h3>
             <input type="text" id="inputName" placeholder="Full Name">
             <input type="text" id="inputNIF" placeholder="NIF or ID Number">
+            <input type="password" id="inputPIN" placeholder="Create PIN (4 digits)">
+            <button type="button" class="btn-gray pin-toggle" id="btnToggleSignPin" onclick="togglePinVisibility('inputPIN', 'btnToggleSignPin')">Show PIN</button>
             <button class="btn-black" id="btnStart" onclick="registerUser()">Start Using Kuza</button>
+        </div>
+
+        <div id="pinGate" style="display:none;">
+            <h3 id="txtPinGateTitle">Enter PIN to Access Account</h3>
+            <input type="password" id="loginPIN" placeholder="Enter your PIN">
+            <button type="button" class="btn-gray pin-toggle" id="btnToggleLoginPin" onclick="togglePinVisibility('loginPIN', 'btnToggleLoginPin')">Show PIN</button>
+            <button class="btn-black" id="btnUnlock" onclick="unlockVendor()">Unlock</button>
         </div>
 
         <div id="mainApp" style="display:none;">
@@ -31,49 +40,57 @@
             <p>ID: <b id="displayVendorID">...</b></p>
             
             <hr>
-
-            <input type="text" id="itemName" placeholder="Item Name (e.g. Rice)">
-            <input type="number" id="saleAmount" placeholder="Amount (RWF)">
-            
-            <select id="transactionType" style="width:100%; margin-bottom:10px; padding:10px; border-radius:5px; border:1px solid #ccc;">
-                <option value="Cash Sale">Cash Sale</option>
-                <option value="Credit Sale">Credit Sale</option>
-                <option value="Restock">Restock </option>
-            </select>
-
-            <div style="display:flex; gap:10px;">
-                <button class="btn-black" id="btnGenCode" onclick="askForCode()" style="flex:1;">1. Get Security Code</button>
-                <button class="btn-green" onclick="simulateMoMo()" style="flex:1;">Pay with MoMo</button>
+            <div class="tabs">
+                <button class="tab-btn active" id="tabTxBtn" onclick="switchTab('tx')">Transaction</button>
+                <button class="tab-btn" id="tabNotebookBtn" onclick="switchTab('notebook')">Digital Notebook</button>
             </div>
 
-            <div id="smsSimulation" style="display:none; background:#e3f2fd; border:1px solid #2196f3; padding:10px; margin-top:10px; border-radius:5px; color: #0d47a1;">
-                <p style="font-size:0.8rem; margin:0;"><b id="txtSmsLabel">SMS Sent:</b></p>
-                <p id="smsContent" style="font-size:0.9rem; margin:0;"></p>
+            <div id="txSection" class="section-panel">
+                <input type="text" id="itemName" placeholder="Item Name (e.g. Rice)">
+                <input type="number" id="itemQty" placeholder="Quantity" style="margin-top: 10px;">
+                <input type="number" id="saleAmount" placeholder="Amount (RWF)">
+                
+                <select id="transactionType" onchange="updateTransactionFlowUI()" style="width:100%; margin-bottom:10px; padding:10px; border-radius:5px; border:1px solid #ccc;">
+                    <option value="optCash">Cash Sale</option>
+                    <option value="optCredit">Credit Sale</option>
+                    <option value="optStock">Restock </option>
+                </select>
+                <p id="flowHint" class="flow-hint"></p>
+
+                <div style="display:flex; gap:10px;">
+                    <button class="btn-black" id="btnGenCode" onclick="askForCode()" style="flex:1;">1. Get Security Code</button>
+                    <button class="btn-black" id="btnMomo" onclick="simulateMoMo()" style="flex:1;">Pay with MoMo</button>
+                </div>
+
+                <div id="smsSimulation" style="display:none; background:#e3f2fd; border:1px solid #2196f3; padding:10px; margin-top:10px; border-radius:5px; color: #0d47a1;">
+                    <p style="font-size:0.8rem; margin:0;"><b id="txtSmsLabel">SMS Sent:</b></p>
+                    <p id="smsContent" style="font-size:0.9rem; margin:0;"></p>
+                </div>
+
+                <div id="verifyBox" style="display:none; margin-top: 20px; border: 2px dashed #333; padding: 15px; border-radius:10px; background: #f9f9f9;">
+                    <p><span id="txtCode">Code</span>: <span id="displayCode" style="font-weight:bold; font-size:1.8em; color:#d32f2f;">0000</span></p>
+                    <input type="text" id="buyerCode" placeholder="Enter code from client">
+                    <button class="btn-green" id="btnVerify" onclick="confirmSale()">2. Verify & Save</button>
+                </div>
             </div>
 
-            <div id="verifyBox" style="display:none; margin-top: 20px; border: 2px dashed #333; padding: 15px; border-radius:10px; background: #f9f9f9;">
-                <p><span id="txtCode">Code</span>: <span id="displayCode" style="font-weight:bold; font-size:1.8em; color:#d32f2f;">0000</span></p>
-                <input type="text" id="buyerCode" placeholder="Enter code from client">
-                <button class="btn-green" id="btnVerify" onclick="confirmSale()">2. Verify & Save</button>
+            <div id="notebookSection" class="section-panel hidden">
+                <h3 id="txtNotebook">Digital Notebook</h3>
+                <table id="journalTable" style="width:100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid #333;">
+                            <th id="txtDateCol" style="text-align:left; padding:5px;">Date</th>
+                            <th id="txtItemCol" style="text-align:left; padding:5px;">Item</th>
+                            <th id="txtTypeCol" style="text-align:left; padding:5px;">Type</th>
+                            <th id="txtAmtCol" style="text-align:right; padding:5px;">Amount</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="journalBody"></tbody>
+                </table>
+                
+                <button class="btn-gray" id="btnReport" onclick="getBankReport()" style="margin-top:20px; width:100%;">Download Bank Report</button>
             </div>
-
-            <hr>
-
-            <h3 id="txtNotebook">Digital Notebook</h3>
-            <table id="journalTable" style="width:100%; border-collapse: collapse;">
-                <thead>
-                    <tr style="border-bottom: 2px solid #333;">
-                        <th id="txtDateCol" style="text-align:left; padding:5px;">Date</th>
-                        <th id="txtItemCol" style="text-align:left; padding:5px;">Item</th>
-                        <th id="txtTypeCol" style="text-align:left; padding:5px;">Type</th>
-                        <th id="txtAmtCol" style="text-align:right; padding:5px;">Amount</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody id="journalBody"></tbody>
-            </table>
-            
-            <button class="btn-gray" id="btnReport" onclick="getBankReport()" style="margin-top:20px; width:100%;">Download Bank Report (PDF)</button>
         </div>
     </div>
 
