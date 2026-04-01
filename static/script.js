@@ -35,15 +35,38 @@ const translations = {
         flowCredit: "Credit Sale: generate and verify code with client.",
         flowInstant: "Instant sale: no code needed.",
         dateCol: "Date", itemCol: "Item", typeCol: "Type", amtCol: "Amount",
-        btnReport: "Download Bank Report", smsSent: "SMS Sent to Client:",
-        // translations for inputs and options
+        btnReport: "Download Report",
+        smsSent: "SMS",
         itemPlace: "Item Name (e.g. Rice)",
         qtyPlace: "Quantity (Qty)",
         amtPlace: "Amount (RWF)",
         optCash: "Cash Sale",
         optCredit: "Credit Sale",
         optStock: "Restock ",
-        btnMomo: "Pay with MoMo"
+        btnMomo: "Pay with MoMo",
+        lblClientPhone: "Client phone number",
+        clientPhonePlace: "e.g. +250 7XX XXX XXX",
+        creditPhoneHint:
+            "After you generate the code, an SMS with the verification code is sent to this number.",
+        smsToClientTitle: "SMS to client",
+        alertNeedPhone: "Enter the client's phone number for credit sale.",
+        smsVendorBody: "KUZA: {item} (x{qty}) — {amt} RWF. Code: {code}. Valid 4 min.",
+        smsClientBody: "KUZA: Credit sale {amt} RWF. Verification code: {code}. Valid 4 min.",
+        alertNeedItemAmt: "Please enter item name and amount.",
+        alertTxSaved: "Transaction saved.",
+        alertUnableCode:
+            "Unable to generate code. Open the app once while online so settings are saved, then try again offline.",
+        alertEnterCode: "Enter the code from the client.",
+        alertSuccess: "Success!",
+        alertWrongCode: "Wrong code, try again.",
+        alertEnterAmt: "Enter amount.",
+        momoInit: "Initiating MoMo transfer…",
+        momoOk: "MTN MoMo: payment successful.",
+        alertFillAll: "Please fill all fields.",
+        alertPinInvalid: "PIN must be {hint}.",
+        alertWrongPin: "Wrong PIN.",
+        alertPdfMissing: "PDF export could not be loaded.",
+        deleteConfirm: "Delete this record?"
     },
     fr: {
 
@@ -64,14 +87,39 @@ const translations = {
         flowCredit: "Vente à crédit: générer et vérifier le code avec le client.",
         flowInstant: "Vente instantanée: pas besoin de code.",
         dateCol: "Date", itemCol: "Article", typeCol: "Type", amtCol: "Montant",
-        btnReport: "Télécharger Rapport ", smsSent: "SMS envoyé au client :",
+        btnReport: "Télécharger le rapport",
+        smsSent: "SMS",
         itemPlace: "Nom de l'article (ex: Riz)",
         qtyPlace: "Quantité (Qté)",
         amtPlace: "Montant (RWF)",
         optCash: "Vente au comptant",
         optCredit: "Vente à crédit",
         optStock: "Réapprovisionnement",
-        btnMomo: "Payer avec MoMo"
+        btnMomo: "Payer avec MoMo",
+        lblClientPhone: "Téléphone du client",
+        clientPhonePlace: "ex. +250 7XX XXX XXX",
+        creditPhoneHint:
+            "Après génération du code, un SMS contenant le code de vérification est envoyé à ce numéro.",
+        smsToClientTitle: "SMS au client",
+        alertNeedPhone: "Entrez le numéro du client pour la vente à crédit.",
+        smsVendorBody: "KUZA : {item} (x{qty}) — {amt} RWF. Code : {code}. Valide 4 min.",
+        smsClientBody:
+            "KUZA : Vente à crédit {amt} RWF. Code de vérification : {code}. Valide 4 min.",
+        alertNeedItemAmt: "Veuillez saisir l'article et le montant.",
+        alertTxSaved: "Transaction enregistrée.",
+        alertUnableCode:
+            "Impossible de générer le code. Ouvrez l'application une fois en ligne pour enregistrer les paramètres, puis réessayez hors ligne.",
+        alertEnterCode: "Saisissez le code communiqué par le client.",
+        alertSuccess: "Réussi !",
+        alertWrongCode: "Code incorrect, réessayez.",
+        alertEnterAmt: "Saisissez le montant.",
+        momoInit: "Lancement du paiement MoMo…",
+        momoOk: "MTN MoMo : paiement réussi.",
+        alertFillAll: "Veuillez remplir tous les champs.",
+        alertPinInvalid: "Le PIN doit être {hint}.",
+        alertWrongPin: "PIN incorrect.",
+        alertPdfMissing: "L'export PDF n'a pas pu être chargé.",
+        deleteConfirm: "Supprimer cette ligne ?"
     },
     rw: {
         title: "Kuza Pocket", regTitle: "Murakaza neza! Mwiyandikishe",
@@ -91,16 +139,45 @@ const translations = {
         flowCredit: "Kugurisha ku ideni: kora kandi wemeze kode hamwe n'umukiriya.",
         flowInstant: "Igurisha rikorwa ako kanya: nta kode ikenewe.",
         dateCol: "Itariki", itemCol: "Igicuruzwa", typeCol: "Ubwoko", amtCol: "Amafaranga",
-        btnReport: "Kuramo Raporo", smsSent: "Ubutumwa bwohererejwe umukiriya :",
+        btnReport: "Kuramo Raporo",
+        smsSent: "SMS",
         itemPlace: "Izina ry'igicuruzwa (urug: Umuceri)",
         qtyPlace: "Umubare (Qty)",
         amtPlace: "Amafaranga (RWF)",
         optCash: "Kugurisha Kashi",
         optCredit: "Kugurisha ku ideni",
         optStock: "Kongeramo ibicuruzwa",
-        btnMomo: "Kwishyura na MoMo"
+        btnMomo: "Kwishyura na MoMo",
+        lblClientPhone: "Telefone y'umukiriya",
+        clientPhonePlace: "urug. +250 7XX XXX XXX",
+        creditPhoneHint:
+            "Nyuma yo gukora kode, SMS irimo kode yo kwemeza ihita yoherezwa kuri iyi telefone.",
+        smsToClientTitle: "SMS ku mukiriya",
+        alertNeedPhone: "Andika telefone y'umukiriya ku kugurisha ku ideni.",
+        smsVendorBody: "KUZA: {item} (x{qty}) — {amt} RWF. Kode: {code}. Imara iminota 4.",
+        smsClientBody:
+            "KUZA: Kugurisha ku ideni {amt} RWF. Kode yo kwemeza: {code}. Imara iminota 4.",
+        alertNeedItemAmt: "Andika izina ry'igicuruzwa n'amafaranga.",
+        alertTxSaved: "Icuruza ryabitswe.",
+        alertUnableCode:
+            "Ntibishoboye gukora kode. Fungura porogaramu rimwe uri online kugirango ubikore, ongera ugerageze offline.",
+        alertEnterCode: "Andika kode umukiriya yaguha.",
+        alertSuccess: "Byagenze neza!",
+        alertWrongCode: "Kode itari yo, ongera ugerageze.",
+        alertEnterAmt: "Andika amafaranga.",
+        momoInit: "Gutangiza kwishyura na MoMo…",
+        momoOk: "MTN MoMo: kwishyura byagenze neza.",
+        alertFillAll: "Uzuza imirima yose.",
+        alertPinInvalid: "PIN igomba kuba {hint}.",
+        alertWrongPin: "PIN itari yo.",
+        alertPdfMissing: "PDF ntiyashoboye gutangizwa.",
+        deleteConfirm: "Gusiba iyi ndangakintu?"
     }
 };
+
+function tLang() {
+    return translations[document.getElementById("langSelect").value];
+}
 
 // This function updates all text on the screen
 function changeLanguage() {
@@ -127,11 +204,15 @@ function changeLanguage() {
     document.getElementById('txtAmtCol').innerText = t.amtCol;
     document.getElementById('btnReport').innerText = t.btnReport;
     document.getElementById('txtSmsLabel').innerText = t.smsSent;
+    document.getElementById('lblClientPhone').innerText = t.lblClientPhone;
+    document.getElementById('txtSmsClientLabel').innerText = t.smsToClientTitle;
+    document.getElementById('creditPhoneHint').innerText = t.creditPhoneHint;
 
     // Update input placeholders
     document.getElementById('itemName').placeholder = t.itemPlace;
     document.getElementById('saleAmount').placeholder = t.amtPlace;
     document.getElementById('itemQty').placeholder = t.qtyPlace;
+    document.getElementById('clientPhone').placeholder = t.clientPhonePlace;
     document.getElementById('inputPIN').placeholder = t.pinCreate;
     document.getElementById('loginPIN').placeholder = t.pinEnter;
     setPinToggleLabel('btnToggleSignPin', 'inputPIN');
@@ -190,12 +271,18 @@ function updateTransactionFlowUI() {
     const btnGenCode = document.getElementById('btnGenCode');
     const flowHint = document.getElementById('flowHint');
 
+    const creditRow = document.getElementById("creditPhoneRow");
+    const smsClientBox = document.getElementById("smsClientSimulation");
+
     if (typeValue === "optCredit") {
+        creditRow.classList.remove("hidden");
         btnGenCode.innerText = t.btnGen;
         flowHint.innerText = t.flowCredit;
         btnGenCode.classList.remove('btn-gray');
         btnGenCode.classList.add('btn-black');
     } else {
+        creditRow.classList.add("hidden");
+        smsClientBox.style.display = "none";
         btnGenCode.innerText = t.saveTx;
         flowHint.innerText = t.flowInstant;
         document.getElementById('verifyBox').style.display = 'none';
@@ -250,6 +337,22 @@ async function makeSecureCodeClient(amount) {
     return String(n).slice(-4).padStart(4, "0");
 }
 
+/** Matches server/client time block (240s) — SMS previews stay visible this long */
+const CODE_VALID_MS = 4 * 60 * 1000;
+let smsHideTimerVendor = null;
+let smsHideTimerClient = null;
+
+function clearSmsHideTimers() {
+    if (smsHideTimerVendor) {
+        clearTimeout(smsHideTimerVendor);
+        smsHideTimerVendor = null;
+    }
+    if (smsHideTimerClient) {
+        clearTimeout(smsHideTimerClient);
+        smsHideTimerClient = null;
+    }
+}
+
 async function fetchPostJson(path, body, timeoutMs) {
     const ctrl = new AbortController();
     const id = setTimeout(function () {
@@ -267,16 +370,38 @@ async function fetchPostJson(path, body, timeoutMs) {
     }
 }
 
-// --- SMS SIMULATION ---
+// --- SMS preview (vendor device + client number) ---
 function showSMS(code, amt) {
-    const item = document.getElementById('itemName').value || "Item";
-    const qty = document.getElementById('itemQty').value || "1";
-    const smsBox = document.getElementById('smsSimulation');
-    const smsText = document.getElementById('smsContent');
-    // a simple message format for the simulated SMS
-    smsText.innerText = `KUZA: Your receipt for ${item} (x${qty}) (${amt} RWF) is ${code}. Valid for 4 mins.`;
-    smsBox.style.display = 'block';
-    setTimeout(() => { smsBox.style.display = 'none'; }, 8000);
+    const t = tLang();
+    const item = document.getElementById("itemName").value || t.itemPlace;
+    const qty = document.getElementById("itemQty").value || "1";
+    const smsBox = document.getElementById("smsSimulation");
+    const smsText = document.getElementById("smsContent");
+    smsText.innerText = t.smsVendorBody
+        .replace("{item}", item)
+        .replace("{qty}", qty)
+        .replace("{amt}", amt)
+        .replace("{code}", code);
+    smsBox.style.display = "block";
+    smsHideTimerVendor = setTimeout(function () {
+        smsBox.style.display = "none";
+        smsHideTimerVendor = null;
+    }, CODE_VALID_MS);
+}
+
+function showClientSMS(phone, code, amt) {
+    const t = tLang();
+    const box = document.getElementById("smsClientSimulation");
+    const body = document.getElementById("smsClientContent");
+    const msg = t.smsClientBody
+        .replace("{amt}", amt)
+        .replace("{code}", code);
+    body.innerText = `→ ${phone}\n${msg}`;
+    box.style.display = "block";
+    smsHideTimerClient = setTimeout(function () {
+        box.style.display = "none";
+        smsHideTimerClient = null;
+    }, CODE_VALID_MS);
 }
 
 // --- SECURITY & SALES ---
@@ -284,14 +409,21 @@ async function askForCode() {
     const amt = document.getElementById('saleAmount').value;
     const item = document.getElementById('itemName').value;
     const typeValue = document.getElementById('transactionType').value;
-    if(!amt || !item) return alert("Please enter item name and amount!");
+    const t = tLang();
+    if (!amt || !item) return alert(t.alertNeedItemAmt);
 
     // Cash/Restock are instant: no security code required.
     if (typeValue !== "optCredit") {
         saveTransaction(amt);
-        alert("Transaction saved.");
+        alert(t.alertTxSaved);
         document.getElementById('saleAmount').value = "";
         document.getElementById('itemName').value = "";
+        return;
+    }
+
+    const clientPhone = document.getElementById("clientPhone").value.trim();
+    if (!clientPhone) {
+        alert(t.alertNeedPhone);
         return;
     }
 
@@ -315,20 +447,20 @@ async function askForCode() {
         }
     }
     if (code == null) {
-        alert(
-            "Unable to generate code. Open the app once while online so settings are saved, then try again offline."
-        );
+        alert(t.alertUnableCode);
         return;
     }
+    clearSmsHideTimers();
     document.getElementById("displayCode").innerText = code;
     document.getElementById("verifyBox").style.display = "block";
     showSMS(code, amt);
+    showClientSMS(clientPhone, code, amt);
 }
 
 async function confirmSale() {
     const amt = document.getElementById("saleAmount").value;
     const typed = document.getElementById("buyerCode").value.trim();
-    if (!typed) return alert("Enter client code first.");
+    if (!typed) return alert(tLang().alertEnterCode);
 
     let verdict = null;
     if (navigator.onLine) {
@@ -361,22 +493,27 @@ async function confirmSale() {
     }
     if (success) {
         saveTransaction(amt);
-        alert("Success!");
+        alert(tLang().alertSuccess);
+        clearSmsHideTimers();
         document.getElementById("verifyBox").style.display = "none";
+        document.getElementById("smsSimulation").style.display = "none";
+        document.getElementById("smsClientSimulation").style.display = "none";
         document.getElementById("saleAmount").value = "";
         document.getElementById("itemName").value = "";
         document.getElementById("buyerCode").value = "";
+        document.getElementById("clientPhone").value = "";
     } else {
-        alert("Wrong code, try again.");
+        alert(tLang().alertWrongCode);
     }
 }
 
 function simulateMoMo() {
+    const t = tLang();
     const amt = document.getElementById('saleAmount').value;
-    if(!amt) return alert("Enter amount!");
-    alert("Initiating MoMo Transfer...");
+    if (!amt) return alert(t.alertEnterAmt);
+    alert(t.momoInit);
     setTimeout(() => {
-        alert("MTN MoMo: Payment Successful!");
+        alert(t.momoOk);
         saveTransaction(amt);
     }, 2000);
 }
@@ -433,7 +570,7 @@ function showNotebook() {
 }
 
 function deleteSale(index) {
-    if(confirm("Delete this record?")) {
+    if (confirm(tLang().deleteConfirm)) {
         let notebook = JSON.parse(localStorage.getItem('my_sales') || "[]");
         notebook.splice(index, 1);
         localStorage.setItem('my_sales', JSON.stringify(notebook));
@@ -446,10 +583,9 @@ function registerUser() {
     const name = document.getElementById('inputName').value;
     const nif = document.getElementById('inputNIF').value;
     const pin = document.getElementById('inputPIN').value;
-    if (!name || !nif || !pin) return alert("Please fill all fields!");
-    const lang = document.getElementById('langSelect').value;
-    const t = translations[lang];
-    if (!/^\d{4}$/.test(pin)) return alert(`PIN must be ${t.pinFormatHint}.`);
+    const t = tLang();
+    if (!name || !nif || !pin) return alert(t.alertFillAll);
+    if (!/^\d{4}$/.test(pin)) return alert(t.alertPinInvalid.replace("{hint}", t.pinFormatHint));
     localStorage.setItem('kuza_name', name);
     localStorage.setItem('kuza_nif', nif);
     localStorage.setItem('kuza_pin', pin);
@@ -485,13 +621,13 @@ function unlockVendor() {
         document.getElementById('pinGate').style.display = 'none';
         document.getElementById('mainApp').style.display = 'block';
     } else {
-        alert("Wrong PIN.");
+        alert(tLang().alertWrongPin);
     }
 }
 
 function getBankReport() {
     if (!window.jspdf) {
-        alert("PDF library not loaded. For offline demo, include jsPDF files locally in /static.");
+        alert(tLang().alertPdfMissing);
         return;
     }
     const { jsPDF } = window.jspdf; 

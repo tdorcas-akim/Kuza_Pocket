@@ -57,6 +57,12 @@
                 </select>
                 <p id="flowHint" class="flow-hint"></p>
 
+                <div id="creditPhoneRow" class="credit-phone-row hidden">
+                    <label id="lblClientPhone" class="field-label" for="clientPhone">Client phone number</label>
+                    <input type="tel" id="clientPhone" inputmode="tel" autocomplete="tel" placeholder="+250 ...">
+                    <p id="creditPhoneHint" class="flow-hint sms-help-hint"></p>
+                </div>
+
                 <div style="display:flex; gap:10px;">
                     <button class="btn-black" id="btnGenCode" onclick="askForCode()" style="flex:1;">1. Get Security Code</button>
                     <button class="btn-black" id="btnMomo" onclick="simulateMoMo()" style="flex:1;">Pay with MoMo</button>
@@ -65,6 +71,11 @@
                 <div id="smsSimulation" style="display:none; background:#e3f2fd; border:1px solid #2196f3; padding:10px; margin-top:10px; border-radius:5px; color: #0d47a1;">
                     <p style="font-size:0.8rem; margin:0;"><b id="txtSmsLabel">SMS Sent:</b></p>
                     <p id="smsContent" style="font-size:0.9rem; margin:0;"></p>
+                </div>
+
+                <div id="smsClientSimulation" class="sms-client-box" style="display:none;">
+                    <p style="font-size:0.8rem; margin:0;"><b id="txtSmsClientLabel">SMS to client</b></p>
+                    <p id="smsClientContent" style="font-size:0.9rem; margin:0;"></p>
                 </div>
 
                 <div id="verifyBox" style="display:none; margin-top: 20px; border: 2px dashed #333; padding: 15px; border-radius:10px; background: #f9f9f9;">
@@ -89,7 +100,7 @@
                     <tbody id="journalBody"></tbody>
                 </table>
                 
-                <button class="btn-gray" id="btnReport" onclick="getBankReport()" style="margin-top:20px; width:100%;">Download Bank Report</button>
+                <button class="btn-gray" id="btnReport" onclick="getBankReport()" style="margin-top:20px; width:100%;">Download Report</button>
             </div>
         </div>
     </div>

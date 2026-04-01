@@ -88,6 +88,36 @@ button {
     color: #444;
 }
 
+.credit-phone-row {
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+.field-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.sms-help-hint {
+    margin-top: 6px;
+    font-size: 0.78rem;
+    color: #666;
+    font-style: italic;
+}
+
+.sms-client-box {
+    background: #e8f5e9;
+    border: 1px solid #43a047;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    color: #1b5e20;
+    text-align: left;
+}
+
 .result-box {
     margin-top: 25px;
     padding: 15px;
