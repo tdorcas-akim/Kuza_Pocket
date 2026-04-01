@@ -105,12 +105,8 @@
         </div>
     </div>
 
-    <script>
-        window.KUZA_CODE_CONFIG = {
-            vendorId: {{ vendor_id|tojson }},
-            secretKey: {{ secret_key|tojson }}
-        };
-    </script>
+    <!-- KUZA config (rendered server-side as JSON in a data attribute) -->
+    <div id="kuza-config" data-config='{{ {"vendorId": vendor_id, "secretKey": secret_key} | tojson }}' style="display:none"></div>
     <script src="{{ url_for('static', filename='vendor/sha256.min.js') }}"></script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
