@@ -1,3 +1,20 @@
+(function bootstrapKuzaCodeConfig() {
+    try {
+        var raw = localStorage.getItem("kuza_code_config");
+        if (raw) {
+            var parsed = JSON.parse(raw);
+            if (parsed && parsed.vendorId != null && parsed.secretKey != null) {
+                if (!window.KUZA_CODE_CONFIG || window.KUZA_CODE_CONFIG.secretKey == null) {
+                    window.KUZA_CODE_CONFIG = parsed;
+                }
+            }
+        }
+        if (window.KUZA_CODE_CONFIG && window.KUZA_CODE_CONFIG.vendorId != null) {
+            localStorage.setItem("kuza_code_config", JSON.stringify(window.KUZA_CODE_CONFIG));
+        }
+    } catch (e) {}
+})();
+
 // Stores all text for the app in three languages
 const translations = {
     en: {
@@ -187,6 +204,69 @@ function updateTransactionFlowUI() {
     }
 }
 
+// --- OFFLINE SECURITY CODE (same algorithm as pocket.py make_secure_code) ---
+function canGenerateCodeClientSide() {
+    const cfg = window.KUZA_CODE_CONFIG;
+    const hasHash =
+        typeof sha256 === "function" ||
+        (typeof crypto !== "undefined" && crypto.subtle);
+    return (
+        hasHash &&
+        cfg &&
+        cfg.vendorId != null &&
+        String(cfg.vendorId).length > 0 &&
+        cfg.secretKey != null
+    );
+}
+
+async function sha256HexUtf8Subtle(str) {
+    const data = new TextEncoder().encode(str);
+    const buf = await crypto.subtle.digest("SHA-256", data);
+    const bytes = new Uint8Array(buf);
+    let hex = "";
+    for (let i = 0; i < bytes.length; i++) {
+        hex += bytes[i].toString(16).padStart(2, "0");
+    }
+    return hex;
+}
+
+async function makeSecureCodeClient(amount) {
+    const cfg = window.KUZA_CODE_CONFIG;
+    if (!cfg || cfg.vendorId == null || cfg.secretKey == null) {
+        throw new Error("missing config");
+    }
+    const timeBlock = Math.floor(Date.now() / 1000 / 240);
+    const rawStr = `${amount}${cfg.vendorId}${cfg.secretKey}${timeBlock}`;
+    let hashHex;
+    if (typeof sha256 === "function") {
+        hashHex = sha256(rawStr);
+    } else if (typeof crypto !== "undefined" && crypto.subtle) {
+        hashHex = await sha256HexUtf8Subtle(rawStr);
+    } else {
+        throw new Error("no sha256");
+    }
+    const last4 = hashHex.slice(-4);
+    const n = parseInt(last4, 16);
+    return String(n).slice(-4).padStart(4, "0");
+}
+
+async function fetchPostJson(path, body, timeoutMs) {
+    const ctrl = new AbortController();
+    const id = setTimeout(function () {
+        ctrl.abort();
+    }, timeoutMs || 4000);
+    try {
+        return await fetch(path, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+            signal: ctrl.signal,
+        });
+    } finally {
+        clearTimeout(id);
+    }
+}
+
 // --- SMS SIMULATION ---
 function showSMS(code, amt) {
     const item = document.getElementById('itemName').value || "Item";
@@ -215,46 +295,79 @@ async function askForCode() {
         return;
     }
 
-    try {
-        const resp = await fetch('/api/get-code', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ amount: amt })
-        });
-        if (!resp.ok) throw new Error("Failed to generate code");
-        const data = await resp.json();
-        document.getElementById('displayCode').innerText = data.code;
-        document.getElementById('verifyBox').style.display = 'block';
-        showSMS(data.code, amt);
-    } catch (err) {
-        alert("Unable to generate code. Please try again.");
+    let code = null;
+    if (navigator.onLine) {
+        try {
+            const resp = await fetchPostJson("/api/get-code", { amount: amt }, 3500);
+            if (resp.ok) {
+                const data = await resp.json();
+                code = data.code;
+            }
+        } catch (e) {
+            /* timeout / offline → client below */
+        }
     }
+    if (code == null && canGenerateCodeClientSide()) {
+        try {
+            code = await makeSecureCodeClient(amt);
+        } catch (e) {
+            code = null;
+        }
+    }
+    if (code == null) {
+        alert(
+            "Unable to generate code. Open the app once while online so settings are saved, then try again offline."
+        );
+        return;
+    }
+    document.getElementById("displayCode").innerText = code;
+    document.getElementById("verifyBox").style.display = "block";
+    showSMS(code, amt);
 }
 
 async function confirmSale() {
-    const amt = document.getElementById('saleAmount').value;
-    const code = document.getElementById('buyerCode').value;
-    if (!code) return alert("Enter client code first.");
-    try {
-        const resp = await fetch('/api/check-code', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ amount: amt, code: code })
-        });
-        if (!resp.ok) throw new Error("Failed verification");
-        const result = await resp.json();
-        if(result.success) {
-            saveTransaction(amt);
-            alert("Success!");
-            document.getElementById('verifyBox').style.display = 'none';
-            document.getElementById('saleAmount').value = "";
-            document.getElementById('itemName').value = "";
-            document.getElementById('buyerCode').value = "";
-        } else {
-            alert("Wrong code, try again.");
+    const amt = document.getElementById("saleAmount").value;
+    const typed = document.getElementById("buyerCode").value.trim();
+    if (!typed) return alert("Enter client code first.");
+
+    let verdict = null;
+    if (navigator.onLine) {
+        try {
+            const resp = await fetchPostJson(
+                "/api/check-code",
+                { amount: amt, code: typed },
+                3500
+            );
+            if (resp.ok) {
+                const result = await resp.json();
+                verdict = result.success === true;
+            }
+        } catch (e) {
+            verdict = null;
         }
-    } catch (err) {
-        alert("Unable to verify code. Try again.");
+    }
+    let success = false;
+    if (verdict === true) {
+        success = true;
+    } else if (verdict === false) {
+        success = false;
+    } else if (canGenerateCodeClientSide()) {
+        try {
+            const expected = await makeSecureCodeClient(amt);
+            success = typed === expected;
+        } catch (e) {
+            success = false;
+        }
+    }
+    if (success) {
+        saveTransaction(amt);
+        alert("Success!");
+        document.getElementById("verifyBox").style.display = "none";
+        document.getElementById("saleAmount").value = "";
+        document.getElementById("itemName").value = "";
+        document.getElementById("buyerCode").value = "";
+    } else {
+        alert("Wrong code, try again.");
     }
 }
 

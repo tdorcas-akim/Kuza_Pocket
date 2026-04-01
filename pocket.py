@@ -20,7 +20,11 @@ def make_secure_code(amount):
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template(
+        "index.html",
+        vendor_id=VENDOR_ID,
+        secret_key=SECRET_KEY,
+    )
 
 @app.route('/api/get-code', methods=['POST'])
 def get_code():

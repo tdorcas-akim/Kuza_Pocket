@@ -94,6 +94,13 @@
         </div>
     </div>
 
+    <script>
+        window.KUZA_CODE_CONFIG = {
+            vendorId: {{ vendor_id|tojson }},
+            secretKey: {{ secret_key|tojson }}
+        };
+    </script>
+    <script src="{{ url_for('static', filename='vendor/sha256.min.js') }}"></script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
